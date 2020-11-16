@@ -14,12 +14,15 @@ class ViewController: UITableViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         var urlString = "";
-        print(urlString)
+        title = "Questions"
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .bookmarks, target: self, action: #selector(showSource))
+        navigationItem.rightBarButtonItem?.tintColor = UIColor.white
+        
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(showSearch))
         
         if navigationController?.tabBarItem.tag == 0{
             urlString = "https://opentdb.com/api.php?amount=10"
-        }else if navigationController?.tabBarItem.tag == 1{
-            urlString = "https://opentdb.com/api.php?amount=10&category=15"
         }else{
             urlString = "https://opentdb.com/api.php?amount=10&category=20"
         }
@@ -70,6 +73,18 @@ class ViewController: UITableViewController {
         let vc = DetailViewController()
         vc.detailItem = questions[indexPath.row]
         navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    @objc func showSource(){
+        let ac = UIAlertController(title: "Open Trivia Database", message: "https://opentdb.com", preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .default))
+        present(ac, animated: true)
+    }
+    
+    @objc func showSearch(){
+        let ac = UIAlertController(title: "Open Trivia Database", message: "https://opentdb.com", preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .default))
+        present(ac, animated: true)
     }
 
 }

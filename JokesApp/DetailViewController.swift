@@ -21,7 +21,7 @@ class DetailViewController: UIViewController {
         <html>
         <head>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <style> body { font-size: 100%; } </style>
+        <style> body { font-size: 100%; font-family: "sans-serif";} </style>
         </head>
         <body>
             <h2>\(detailItem.question)</h2>

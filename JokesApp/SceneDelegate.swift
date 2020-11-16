@@ -21,8 +21,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if let tabBarController = window?.rootViewController as? UITabBarController {
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let vc = storyboard.instantiateViewController(withIdentifier: "NavController")
-            vc.tabBarItem = UITabBarItem(tabBarSystemItem: .topRated, tag: 1)
-            vc.tabBarItem = UITabBarItem(tabBarSystemItem: .history, tag: 2)
+            vc.tabBarItem = UITabBarItem(tabBarSystemItem: .history, tag: 1)
             tabBarController.viewControllers?.append(vc)
         }
     }
