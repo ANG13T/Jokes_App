@@ -56,8 +56,9 @@
         <scene sceneID="fu4-KY-aHG">
             <objects>
                 <navigationController storyboardIdentifier="NavController" automaticallyAdjustsScrollViewInsets="NO" id="fVk-Uj-3RI" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Random" image="questionmark.square.fill" catalog="system" selectedImage="questionmark.square.fill" id="BUS-zh-vwC"/>
+                    <tabBarItem key="tabBarItem" title="Random" image="questionmark.square.fill" catalog="system" selectedImage="questionmark.square.fill" id="u98-wg-wHf"/>
                     <toolbarItems/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="ixn-Nq-WwJ">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>

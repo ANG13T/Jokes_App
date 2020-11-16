@@ -13,20 +13,37 @@ class ViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        let urlString = "https://opentdb.com/api.php?amount=10"
+        var urlString = "";
         print(urlString)
+        
+        if navigationController?.tabBarItem.tag == 0{
+            urlString = "https://opentdb.com/api.php?amount=10"
+        }else if navigationController?.tabBarItem.tag == 1{
+            urlString = "https://opentdb.com/api.php?amount=10&category=15"
+        }else{
+            urlString = "https://opentdb.com/api.php?amount=10&category=20"
+        }
         
         if let url = URL(string: urlString){
             if let data = try? Data(contentsOf: url){
                 parse(json: data)
+            }else{
+                showError()
             }
+        }else{
+            showError()
         }
+    }
+    
+    func showError(){
+        let ac = UIAlertController(title: "Loading Error", message: "There was a problem loading the questions", preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .default))
+        present(ac, animated: true)
     }
     
     func parse(json: Data){
         let decoder = JSONDecoder()
         print("parsing JSON")
-        print(String(data: json, encoding: .utf8))
    
         if let jsonQuestions = try? decoder.decode(Questions.self, from: json){
             questions = jsonQuestions.results
