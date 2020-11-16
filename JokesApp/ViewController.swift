@@ -9,11 +9,12 @@ import UIKit
 
 class ViewController: UITableViewController {
     var questions = [Question]()
+    var urlString = "";
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        var urlString = "";
+       
         title = "Questions"
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .bookmarks, target: self, action: #selector(showSource))
@@ -21,12 +22,18 @@ class ViewController: UITableViewController {
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(showSearch))
         
+        navigationItem.leftBarButtonItem?.tintColor = UIColor.white
+        
         if navigationController?.tabBarItem.tag == 0{
             urlString = "https://opentdb.com/api.php?amount=10"
         }else{
             urlString = "https://opentdb.com/api.php?amount=10&category=20"
         }
         
+        showData()
+    }
+    
+    func showData(){
         if let url = URL(string: urlString){
             if let data = try? Data(contentsOf: url){
                 parse(json: data)
@@ -82,9 +89,36 @@ class ViewController: UITableViewController {
     }
     
     @objc func showSearch(){
-        let ac = UIAlertController(title: "Open Trivia Database", message: "https://opentdb.com", preferredStyle: .alert)
-        ac.addAction(UIAlertAction(title: "OK", style: .default))
+        let ac = UIAlertController(title: "Search for Question: ", message: nil, preferredStyle: .alert)
+                ac.addTextField()
+        
+        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+                
+        let submitAction = UIAlertAction(title: "Search", style: .default){
+            [weak self, weak ac] _ in
+            guard let answer = ac?.textFields?[0].text else {return}
+            self?.search(index: answer)
+        }
+        
+        ac.addAction(submitAction)
         present(ac, animated: true)
+    }
+    
+    func search(index: String){
+        let lowerSearch = index.lowercased()
+        
+        if(index.isEmpty || index == ""){
+            showData()
+            return
+        }
+        var newQuestions: [Question] = []
+        for question in questions{
+            if(question.question.lowercased().contains(lowerSearch)){
+                newQuestions.append(question)
+            }
+        }
+        questions = newQuestions
+        tableView.reloadData()
     }
 
 }
