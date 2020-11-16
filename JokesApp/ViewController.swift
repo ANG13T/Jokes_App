@@ -8,12 +8,12 @@
 import UIKit
 
 class ViewController: UITableViewController {
-    var jokes = [Joke]()
+    var questions = [Question]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        let urlString = "https://sv443.net/jokeapi/v2/joke/Dark?amount=5"
+        let urlString = "https://opentdb.com/api.php?amount=10"
         print(urlString)
         
         if let url = URL(string: urlString){
@@ -26,24 +26,33 @@ class ViewController: UITableViewController {
     func parse(json: Data){
         let decoder = JSONDecoder()
         print("parsing JSON")
-        print(json.isEmpty)
-        if let jsonJokes = try? decoder.decode(Jokes.self, from: json){
-            jokes = jsonJokes.jokes
-            print(jokes)
+        print(String(data: json, encoding: .utf8))
+   
+        if let jsonQuestions = try? decoder.decode(Questions.self, from: json){
+            questions = jsonQuestions.results
+            print(questions.count)
             tableView.reloadData()
+        }else{
+            print("soemthing failed")
         }
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return jokes.count
+        return questions.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let joke = jokes[indexPath.row]
+        let question = questions[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "Joke", for: indexPath)
-        cell.textLabel?.text = joke.setup
-        cell.detailTextLabel?.text = joke.delivery
+        cell.textLabel?.text = question.question
+        cell.detailTextLabel?.text = question.correct_answer
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let vc = DetailViewController()
+        vc.detailItem = questions[indexPath.row]
+        navigationController?.pushViewController(vc, animated: true)
     }
 
 }
