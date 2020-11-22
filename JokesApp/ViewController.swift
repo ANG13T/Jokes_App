@@ -13,16 +13,18 @@ class ViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-       
         title = "Questions"
-        
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .bookmarks, target: self, action: #selector(showSource))
         navigationItem.rightBarButtonItem?.tintColor = UIColor.white
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(showSearch))
         
         navigationItem.leftBarButtonItem?.tintColor = UIColor.white
+        // Do any additional setup after loading the view.
+        performSelector(inBackground: #selector(fetchJSON), with: nil)
+    }
+    
+    @objc func fetchJSON(){
         
         if navigationController?.tabBarItem.tag == 0{
             urlString = "https://opentdb.com/api.php?amount=10"
@@ -30,22 +32,20 @@ class ViewController: UITableViewController {
             urlString = "https://opentdb.com/api.php?amount=10&category=20"
         }
         
-        showData()
+        performSelector(inBackground: #selector(showData), with: nil)
     }
     
-    func showData(){
+    @objc func showData(){
         if let url = URL(string: urlString){
             if let data = try? Data(contentsOf: url){
-                parse(json: data)
-            }else{
-                showError()
-            }
-        }else{
-            showError()
+            parse(json: data)
+            return
         }
+      }
+      performSelector(onMainThread: #selector(showError), with: nil, waitUntilDone: false)
     }
     
-    func showError(){
+    @objc func showError(){
         let ac = UIAlertController(title: "Loading Error", message: "There was a problem loading the questions", preferredStyle: .alert)
         ac.addAction(UIAlertAction(title: "OK", style: .default))
         present(ac, animated: true)
@@ -58,9 +58,9 @@ class ViewController: UITableViewController {
         if let jsonQuestions = try? decoder.decode(Questions.self, from: json){
             questions = jsonQuestions.results
             print(questions.count)
-            tableView.reloadData()
+            tableView.performSelector(onMainThread: #selector(tableView.reloadData), with: nil, waitUntilDone: false)
         }else{
-            print("soemthing failed")
+            tableView.performSelector(onMainThread: #selector(showError), with: nil, waitUntilDone: false)
         }
     }
     
